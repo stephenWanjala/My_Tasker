@@ -1,0 +1,64 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "ac54405c530fb1e775457a8085bef141",
+    "entities": [
+      {
+        "tableName": "Task",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`taskId` INTEGER PRIMARY KEY AUTOINCREMENT, `taskTittle` TEXT NOT NULL, `taskBody` TEXT NOT NULL, `startTime` INTEGER NOT NULL, `endTime` INTEGER NOT NULL, `completed` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "taskId",
+            "columnName": "taskId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "taskTittle",
+            "columnName": "taskTittle",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "taskBody",
+            "columnName": "taskBody",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startTime",
+            "columnName": "startTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endTime",
+            "columnName": "endTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "completed",
+            "columnName": "completed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "taskId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ac54405c530fb1e775457a8085bef141')"
+    ]
+  }
+}

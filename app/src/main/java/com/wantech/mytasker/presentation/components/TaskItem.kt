@@ -6,15 +6,24 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,8 +31,17 @@ import androidx.compose.ui.unit.dp
 import com.wantech.mytasker.domain.model.Task
 import com.wantech.mytasker.util.toDate
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskItem(modifier: Modifier = Modifier, task: Task, onclickTask: (Task) -> Unit) {
+    var completeStatusIcon by remember {
+        mutableStateOf(Icons.Outlined.Circle)
+    }
+
+    LaunchedEffect(key1 = task.completed) {
+        if (task.completed) completeStatusIcon =
+            Icons.Default.CheckCircle else Icons.Outlined.Circle
+    }
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -36,15 +54,7 @@ fun TaskItem(modifier: Modifier = Modifier, task: Task, onclickTask: (Task) -> U
             fontWeight = FontWeight.Bold
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Spacer(
-                modifier = Modifier
-                    .size(16.dp)
-                    .clip(CircleShape)
-                    .fillOnComplete(
-                        tasKComplete = task.completed,
-                        backGround = MaterialTheme.colorScheme.primary
-                    )
-            )
+            Icon(imageVector = completeStatusIcon, contentDescription = null, modifier.size(16.dp))
             Divider(
                 modifier = Modifier.width(6.dp), thickness = 1.dp,
                 color = MaterialTheme.colorScheme.onBackground
@@ -54,6 +64,9 @@ fun TaskItem(modifier: Modifier = Modifier, task: Task, onclickTask: (Task) -> U
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Card(
+                    onClick = {
+                        onclickTask(task)
+                    },
                     shape = RoundedCornerShape(16.dp),
                     modifier = Modifier.fillMaxWidth(0.9f)
                 ) {
@@ -105,8 +118,7 @@ fun Modifier.fillOnComplete(tasKComplete: Boolean, backGround: Color): Modifier 
                 shape = CircleShape
             )
             .background(color = backGround, shape = CircleShape)
-    }
-     else{
+    } else {
         this
             .border(
                 border = BorderStroke(

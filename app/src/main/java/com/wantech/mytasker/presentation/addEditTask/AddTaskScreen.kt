@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -20,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.wantech.mytasker.presentation.addEditTask.components.AddTaskAppBar
 import com.wantech.mytasker.presentation.addEditTask.components.CategoryChipsSection
+import com.wantech.mytasker.presentation.addEditTask.components.TaskBody
 import com.wantech.mytasker.presentation.addEditTask.components.TaskTime
 import com.wantech.mytasker.presentation.addEditTask.components.TaskTittle
 import com.wantech.mytasker.util.Screen
@@ -43,15 +46,20 @@ fun AddTaskScreen(navController: NavHostController) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(paddingValues = paddingValues),
+                    .padding(paddingValues = paddingValues)
+                    .verticalScroll(state = rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 val tittle = remember {
                     mutableStateOf(TextFieldValue(text = ""))
                 }
+                val body = remember {
+                    mutableStateOf(TextFieldValue(text = ""))
+                }
                 TaskTittle(tittle = tittle)
                 CategoryChipsSection()
                 TaskTime()
+                TaskBody(body = body)
             }
         }
     }

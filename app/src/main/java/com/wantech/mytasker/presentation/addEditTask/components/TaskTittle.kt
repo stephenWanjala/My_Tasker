@@ -55,7 +55,8 @@ fun TaskEditText(
         imeAction = ImeAction.Next,
         capitalization = KeyboardCapitalization.Words,
         keyboardType = KeyboardType.Text
-    )
+    ),
+    singleLine: Boolean = true
 ) {
 
     OutlinedTextField(
@@ -69,9 +70,34 @@ fun TaskEditText(
         shape = RoundedCornerShape(20.dp),
         maxLines = maxLines,
         modifier = modifier.padding(16.dp),
-        keyboardOptions=keyboardOptions
+        keyboardOptions = keyboardOptions,
+        singleLine = singleLine
 
     )
+
+}
+
+@Composable
+fun TaskBody(
+    modifier: Modifier = Modifier,
+    body: MutableState<TextFieldValue>
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        Text(
+            text = "Task Description", textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.titleMedium
+        )
+        TaskEditText(
+            placeHolder = "Task Body...", state = body, maxLines = 6, singleLine = false,
+            keyboardOptions = KeyboardOptions().copy
+                (imeAction = ImeAction.Done)
+        )
+    }
 }
 
 

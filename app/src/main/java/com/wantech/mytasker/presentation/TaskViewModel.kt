@@ -6,5 +6,4 @@ import javax.inject.Inject
 
 class TaskViewModel @Inject constructor(
     private val repository: TaskRepository
-) :ViewModel(){
-}
+) : ViewModel()

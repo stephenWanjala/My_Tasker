@@ -25,7 +25,7 @@ fun NavigationHost(navHostController: NavHostController) {
 
             )){
             val taskId = it.arguments?.getInt(/* key = */ "taskId",/* defaultValue = */ -1)
-            AddTaskScreen()
+            AddTaskScreen(navController = navHostController)
         }
     }
 }

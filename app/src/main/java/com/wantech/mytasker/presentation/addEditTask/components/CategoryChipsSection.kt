@@ -9,7 +9,7 @@ import androidx.compose.material.icons.filled.Handshake
 import androidx.compose.material.icons.filled.MeetingRoom
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.SportsFootball
-import androidx.compose.material3.AssistChip
+import androidx.compose.material.icons.filled.Task
 import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -27,19 +27,21 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryChipsSection(
-    modifier: Modifier = Modifier.padding(16.dp),
+    modifier: Modifier = Modifier,
     categories: List<Category> = listOf(
         Category(categoryName = "Education", icon = Icons.Default.School),
         Category(categoryName = "Sports", icon = Icons.Default.SportsFootball),
         Category(categoryName = "Friends", icon = Icons.Default.Handshake),
         Category(categoryName = "Meetings", icon = Icons.Default.MeetingRoom),
+        Category(categoryName = "General", icon = Icons.Default.Task),
     )
 ) {
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         Text(
@@ -50,9 +52,9 @@ fun CategoryChipsSection(
         )
 
         SelectCategories(categories,
-        onCategoryClick = {
+            onCategoryClick = {
 
-        })
+            })
 
 
     }
@@ -60,13 +62,17 @@ fun CategoryChipsSection(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun SelectCategories(categories: List<Category>,
-onCategoryClick:(Category)->Unit) {
-    var selectedCategoryIndex= remember {
+private fun SelectCategories(
+    categories: List<Category>,
+    onCategoryClick: (Category) -> Unit
+) {
+    var selectedCategoryIndex = remember {
         mutableStateOf(0)
     }
     FlowRow(
-        modifier = Modifier.fillMaxWidth().padding(4.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp),
         crossAxisAlignment = FlowCrossAxisAlignment.Center,
         crossAxisSpacing = 6.dp, mainAxisSpacing = 6.dp
     ) {

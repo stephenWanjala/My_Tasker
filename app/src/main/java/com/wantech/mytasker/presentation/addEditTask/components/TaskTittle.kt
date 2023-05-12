@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -96,6 +97,29 @@ fun TaskBody(
             placeHolder = "Task Body...", state = body, maxLines = 6, singleLine = false,
             keyboardOptions = KeyboardOptions().copy
                 (imeAction = ImeAction.Done)
+        )
+    }
+}
+
+
+@Composable
+fun CreateTaskButton(
+    modifier: Modifier = Modifier,
+    buttonText: String,
+    enabled: () -> Boolean,
+    onclick: () -> Unit
+) {
+    Button(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        onClick = onclick,
+        shape = RoundedCornerShape(8.dp),
+        enabled = enabled.invoke()
+    ) {
+        Text(
+            text = buttonText, modifier = Modifier,
+            textAlign = TextAlign.Center
         )
     }
 }

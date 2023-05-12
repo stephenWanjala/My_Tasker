@@ -73,9 +73,9 @@ fun HomeScreen(navController: NavHostController) {
                     task = Task(
                         taskTittle = "Walk around",
                         taskBody = "Walk around Msu area",
-                        startTime = System.currentTimeMillis() + (100 * index),
-                        endTime = System.currentTimeMillis() + 200000 + (10 * index),
-                        completed = false
+                        startTime = System.currentTimeMillis() + (1000 * index),
+                        endTime = System.currentTimeMillis() + 200000 + (100 * index),
+                        completed = true
                     ),
                     onclickTask = { task ->
                         navController.navigate(Screen.AddEditScreen.route + "?taskId=${task.taskId}")

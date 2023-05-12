@@ -14,10 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.wantech.mytasker.R
 
 @Composable
 fun AddTaskHeader(
@@ -30,7 +32,7 @@ fun AddTaskHeader(
             .padding(16.dp)
     ) {
         Text(
-            text = "Create Task",
+            text = stringResource(id = R.string.create_task),
             modifier = Modifier.align(Alignment.Center),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
@@ -51,7 +53,7 @@ fun AddTaskHeader(
 fun AddTaskAppBar(modifier: Modifier = Modifier, closePage: () -> Unit) {
     CenterAlignedTopAppBar(modifier = modifier, title = {
         Text(
-            text = "Create Task",
+            text = stringResource(id = R.string.create_task),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold

@@ -17,9 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.wantech.mytasker.R
 import com.wantech.mytasker.presentation.addEditTask.components.AddTaskAppBar
 import com.wantech.mytasker.presentation.addEditTask.components.CategoryChipsSection
 import com.wantech.mytasker.presentation.addEditTask.components.CreateTaskButton
@@ -61,7 +63,7 @@ fun AddTaskScreen(navController: NavHostController) {
                 CategoryChipsSection()
                 TaskTime()
                 TaskBody(body = body)
-                CreateTaskButton(buttonText = "create Task", enabled = {
+                CreateTaskButton(buttonText = stringResource(R.string.create_task), enabled = {
                     tittle.value.text.isNotEmpty() && body.value.text.isNotEmpty()
                     /*
                     && start and End time also selected

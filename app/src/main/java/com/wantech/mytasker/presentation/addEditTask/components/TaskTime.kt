@@ -18,6 +18,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import com.wantech.mytasker.R
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -50,14 +52,14 @@ fun TaskTime(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Starts",
+                text = stringResource(R.string.starts),
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "Ends",
+                text = stringResource(R.string.ends),
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold
@@ -79,7 +81,10 @@ fun TaskTime(
 
                         Text(text = taskTimeState.value.selectedStartDateTime.format(taskTimeState.value.formatter))
                     } else {
-                        Icon(imageVector = Icons.Rounded.Add, contentDescription = "add")
+                        Icon(
+                            imageVector = Icons.Rounded.Add,
+                            contentDescription = stringResource(id = R.string.add)
+                        )
                     }
                 },
             )
@@ -91,7 +96,10 @@ fun TaskTime(
                     if (taskTimeState.value.endTimeChipClicked) {
                         Text(text = taskTimeState.value.selectedEndDateTime.format(taskTimeState.value.formatter))
                     } else {
-                        Icon(imageVector = Icons.Rounded.Add, contentDescription = "add")
+                        Icon(
+                            imageVector = Icons.Rounded.Add,
+                            contentDescription = stringResource(id = R.string.add)
+                        )
                     }
 
                 })
@@ -103,7 +111,7 @@ fun TaskTime(
             shape = RoundedCornerShape(20.dp),
             buttons = {
                 positiveButton(
-                    text = "Ok",
+                    text = stringResource(id = R.string.ok),
 //                textStyle = MaterialTheme.typography.labelMedium
                     onClick = {
                         taskTimeState.value =
@@ -116,7 +124,7 @@ fun TaskTime(
                     }
                 )
                 negativeButton(
-                    text = "Cancel"
+                    text = stringResource(id = R.string.cancel)
                 )
             }) {
             timepicker(
@@ -130,7 +138,7 @@ fun TaskTime(
         MaterialDialog(dialogState = endDateState,
             shape = RoundedCornerShape(20.dp),
             buttons = {
-                positiveButton(text = "Ok", onClick = {
+                positiveButton(text = stringResource(R.string.ok), onClick = {
                     taskTimeState.value =
                         taskTimeState.value.copy(
                             selectedEndDateTime = taskTimeState.value.selectedEndTime.atDate(
@@ -139,15 +147,15 @@ fun TaskTime(
                         )
                     taskTimeState.value = taskTimeState.value.copy(endTimeChipClicked = true)
                 })
-                negativeButton(text = "Cancel")
+                negativeButton(text = stringResource(R.string.cancel))
             }) {
             timepicker(
-                title = "Select End Time",
+                title = stringResource(R.string.select_end_time),
                 onTimeChange = { localTime ->
                     taskTimeState.value = taskTimeState.value.copy(selectedEndTime = localTime)
                     taskTimeState.value = taskTimeState.value.copy(endTimeChipClicked = true)
                 },
-                timeRange = taskTimeState.value.selectedStartTime..LocalTime.MAX
+                timeRange = taskTimeState.value.selectedStartTime.plusMinutes(10L)..LocalTime.MAX
             )
         }
 

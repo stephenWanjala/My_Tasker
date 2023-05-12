@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">My Tasker</string>
     <string name="error_unknown">Unknown Error Happened</string>
+    <string name="create_task">create Task</string>
+    <string name="add">Add</string>
+    <string name="task_body">Task Body…</string>
+    <string name="task_description">Task Description</string>
+    <string name="add_task">Add Task</string>
+    <string name="task_tittle">Task Tittle</string>
+    <string name="tittle">Tittle…</string>
+    <string name="select_end_time">Select End Time</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="starts">Starts</string>
+    <string name="ends">Ends</string>
 </resources>

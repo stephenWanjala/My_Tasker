@@ -36,7 +36,11 @@ fun NavigationHost(navHostController: NavHostController, taskState: TaskState) {
         ) {
             val taskId = it.arguments?.getInt(/* key = */ "taskId",/* defaultValue = */ -1)
             AddTaskScreen(onCreateTask = {
-
+                navHostController.navigate(Screen.HomeScreen.route) {
+                    popUpTo(Screen.HomeScreen.route) {
+                        inclusive = true
+                    }
+                }
             },
                 closePage = {
                     navHostController.navigate(Screen.HomeScreen.route) {

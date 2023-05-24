@@ -14,32 +14,39 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.wantech.mytasker.R
+import com.wantech.mytasker.presentation.TaskUiEvent
+import com.wantech.mytasker.presentation.TaskViewModel
 import com.wantech.mytasker.presentation.addEditTask.components.AddTaskAppBar
 import com.wantech.mytasker.presentation.addEditTask.components.CategoryChipsSection
 import com.wantech.mytasker.presentation.addEditTask.components.CreateTaskButton
 import com.wantech.mytasker.presentation.addEditTask.components.TaskBody
 import com.wantech.mytasker.presentation.addEditTask.components.TaskTime
 import com.wantech.mytasker.presentation.addEditTask.components.TaskTittle
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddTaskScreen(
     closePage: () -> Unit,
-    onCreateTask: () -> Unit
+    onCreateTask: () -> Unit,
+    taskViewModel: TaskViewModel = hiltViewModel()
 ) {
+    val state = taskViewModel.state.collectAsState()
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Scaffold(modifier = Modifier.fillMaxSize(),
             topBar = {
                 AddTaskAppBar(closePage = closePage)
-            }) {
-            val paddingValues = it
+            }) { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -47,26 +54,44 @@ fun AddTaskScreen(
                     .verticalScroll(state = rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                val tittle = remember {
-                    mutableStateOf(TextFieldValue(text = ""))
-                }
-                val body = remember {
-                    mutableStateOf(TextFieldValue(text = ""))
-                }
-                TaskTittle(tittle = tittle)
-                CategoryChipsSection()
-                TaskTime()
-                TaskBody(body = body)
-                CreateTaskButton(buttonText = stringResource(R.string.create_task), enabled = {
-                    tittle.value.text.isNotEmpty() && body.value.text.isNotEmpty()
-                    /*
-                    && start and End time also selected
-                     */
-                },
-                    onclick = {
-                        onCreateTask()
+
+                TaskTittle(tittle = state.value.tittle,
+                    onTextChange = {
+                        taskViewModel.onEvent(TaskUiEvent.EnterTittle(value = it))
                     })
+                CategoryChipsSection()
+                TaskTime(
+                    startTime = state.value.startTime?.toLocalTime(),
+                    endTime = state.value.endTime?.toLocalTime(),
+                    onStartTimeChange = { startTime ->
+                        taskViewModel.onEvent(
+                            TaskUiEvent.SelectStartTime(
+                                value = startTime.toEpochMillis()
+                            )
+                        )
+
+                    },
+                    onEndTimeChange = { endTime ->
+                        taskViewModel.onEvent(TaskUiEvent.SelectEndTime(value = endTime.toEpochMillis()))
+                    }
+                )
+                TaskBody(body = state.value.taskBody,
+                    onTextChange = {
+                        taskViewModel.onEvent(TaskUiEvent.EnterTaskBody(it))
+                    })
+                CreateTaskButton(
+                    buttonText = stringResource(R.string.create_task),
+                    enabled = state.value.createButtonEnabled,
+                    onclick = onCreateTask
+                )
             }
         }
     }
 }
+
+
+fun LocalTime.toEpochMillis(): Long =
+    LocalDate.now().atTime(this).toInstant(ZoneOffset.UTC).toEpochMilli()
+
+fun Long.toLocalTime(): LocalTime =
+    Instant.ofEpochMilli(this).atZone(ZoneId.systemDefault()).toLocalTime()

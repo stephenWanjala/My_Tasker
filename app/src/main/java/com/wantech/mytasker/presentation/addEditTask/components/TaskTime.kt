@@ -14,21 +14,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import com.wantech.mytasker.R
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -36,10 +30,14 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun TaskTime(
     modifier: Modifier = Modifier,
-    taskTimeState: MutableState<TaskTimeState> = remember { mutableStateOf(TaskTimeState()) }
+    startTime: LocalTime? = null,
+    endTime: LocalTime? = null,
+    onStartTimeChange: (LocalTime) -> Unit,
+    onEndTimeChange: (LocalTime) -> Unit
 ) {
     val startDateState = rememberMaterialDialogState()
     val endDateState = rememberMaterialDialogState()
+    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("hh.mma")
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -74,12 +72,11 @@ fun TaskTime(
             ElevatedAssistChip(
                 onClick = {
                     startDateState.show()
-                    taskTimeState.value = taskTimeState.value.copy(starTimeChipClicked = true)
                 },
                 label = {
-                    if (taskTimeState.value.starTimeChipClicked) {
+                    if (startTime != null) {
 
-                        Text(text = taskTimeState.value.selectedStartDateTime.format(taskTimeState.value.formatter))
+                        Text(text = startTime.format(formatter))
                     } else {
                         Icon(
                             imageVector = Icons.Rounded.Add,
@@ -93,8 +90,8 @@ fun TaskTime(
                 endDateState.show()
             },
                 label = {
-                    if (taskTimeState.value.endTimeChipClicked) {
-                        Text(text = taskTimeState.value.selectedEndDateTime.format(taskTimeState.value.formatter))
+                    if (endTime != null) {
+                        Text(text = endTime.format(formatter))
                     } else {
                         Icon(
                             imageVector = Icons.Rounded.Add,
@@ -114,13 +111,7 @@ fun TaskTime(
                     text = stringResource(id = R.string.ok),
 //                textStyle = MaterialTheme.typography.labelMedium
                     onClick = {
-                        taskTimeState.value =
-                            taskTimeState.value.copy(
-                                selectedStartDateTime = taskTimeState.value.selectedStartTime.atDate(
-                                    taskTimeState.value.selectedStartDate
-                                )
-                            )
-                        taskTimeState.value = taskTimeState.value.copy(endTimeChipClicked = true)
+
                     }
                 )
                 negativeButton(
@@ -129,55 +120,30 @@ fun TaskTime(
             }) {
             timepicker(
                 title = "Select Start Time",
-                onTimeChange = { localTime ->
-                    taskTimeState.value = taskTimeState.value.copy(selectedStartTime = localTime)
-                    taskTimeState.value = taskTimeState.value.copy(endTimeChipClicked = true)
-                },
+                onTimeChange = onStartTimeChange,
             )
         }
         MaterialDialog(dialogState = endDateState,
             shape = RoundedCornerShape(20.dp),
             buttons = {
                 positiveButton(text = stringResource(R.string.ok), onClick = {
-                    taskTimeState.value =
-                        taskTimeState.value.copy(
-                            selectedEndDateTime = taskTimeState.value.selectedEndTime.atDate(
-                                taskTimeState.value.selectedEndDate
-                            )
-                        )
-                    taskTimeState.value = taskTimeState.value.copy(endTimeChipClicked = true)
+
                 })
                 negativeButton(text = stringResource(R.string.cancel))
             }) {
-            timepicker(
-                title = stringResource(R.string.select_end_time),
-                onTimeChange = { localTime ->
-                    taskTimeState.value = taskTimeState.value.copy(selectedEndTime = localTime)
-                    taskTimeState.value = taskTimeState.value.copy(endTimeChipClicked = true)
-                },
-                timeRange = taskTimeState.value.selectedStartTime.plusMinutes(10L)..LocalTime.MAX
-            )
+            startTime?.let {
+                it.plusMinutes(10L)..LocalTime.MAX
+            }?.let {
+                timepicker(
+                    title = stringResource(R.string.select_end_time),
+                    onTimeChange = onEndTimeChange,
+                    timeRange = it,
+                )
+            }
         }
 
 
     }
 }
 
-data class TaskTimeState(
-    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM,h.mma"),
-    val selectedStartTime: LocalTime = LocalTime.now(),
-    val selectedStartDate: LocalDate = LocalDate.now(),
-    val selectedEndTime: LocalTime = LocalTime.now(),
-    val selectedEndDate: LocalDate = LocalDate.now(),
-    val selectedStartDateTime: LocalDateTime = LocalDateTime.now(),
-    val selectedEndDateTime: LocalDateTime = LocalDateTime.now(),
-    val starTimeChipClicked: Boolean = false,
-    val endTimeChipClicked: Boolean = false
-)
 
-
-@Preview(showBackground = true)
-@Composable
-fun ChipSe() {
-    TaskTime()
-}

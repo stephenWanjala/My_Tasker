@@ -12,25 +12,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wantech.mytasker.R
 
 @Composable
 fun TaskTittle(
     modifier: Modifier = Modifier,
-    tittle: MutableState<TextFieldValue>
+    tittle: String,
+    onTextChange: (String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -39,10 +35,16 @@ fun TaskTittle(
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         Text(
-            text = stringResource(R.string.task_tittle), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
+            text = stringResource(R.string.task_tittle),
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.titleMedium
         )
-        TaskEditText(placeHolder = stringResource(R.string.tittle), state = tittle)
+        TaskEditText(
+            placeHolder = stringResource(R.string.tittle),
+            onTextChange = onTextChange,
+            text = tittle
+        )
     }
 }
 
@@ -53,19 +55,20 @@ fun TaskEditText(
     modifier: Modifier = Modifier,
     maxLines: Int = 1,
     placeHolder: String,
-    state: MutableState<TextFieldValue>,
+    text: String,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
         imeAction = ImeAction.Next,
         capitalization = KeyboardCapitalization.Words,
         keyboardType = KeyboardType.Text
     ),
-    singleLine: Boolean = true
+    singleLine: Boolean = true,
+    onTextChange: (String) -> Unit
 ) {
 
     OutlinedTextField(
-        value = state.value,
-        onValueChange = {
-            state.value = it
+        value = text,
+        onValueChange = { value ->
+            onTextChange(value)
         },
         placeholder = {
             Text(text = placeHolder, textAlign = TextAlign.Center)
@@ -83,7 +86,8 @@ fun TaskEditText(
 @Composable
 fun TaskBody(
     modifier: Modifier = Modifier,
-    body: MutableState<TextFieldValue>
+    body: String,
+    onTextChange: (String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -92,13 +96,19 @@ fun TaskBody(
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         Text(
-            text = stringResource(R.string.task_description), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
+            text = stringResource(R.string.task_description),
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.titleMedium
         )
         TaskEditText(
-            placeHolder = stringResource(R.string.task_body), state = body, maxLines = 6, singleLine = false,
+            placeHolder = stringResource(R.string.task_body),
+            text = body,
+            maxLines = 6,
+            singleLine = false,
             keyboardOptions = KeyboardOptions().copy
-                (imeAction = ImeAction.Done)
+                (imeAction = ImeAction.Done),
+            onTextChange = onTextChange
         )
     }
 }
@@ -108,7 +118,7 @@ fun TaskBody(
 fun CreateTaskButton(
     modifier: Modifier = Modifier,
     buttonText: String,
-    enabled: () -> Boolean,
+    enabled: Boolean=false,
     onclick: () -> Unit
 ) {
     Button(
@@ -117,7 +127,7 @@ fun CreateTaskButton(
             .padding(16.dp),
         onClick = onclick,
         shape = RoundedCornerShape(8.dp),
-        enabled = enabled.invoke()
+        enabled =enabled
     ) {
         Text(
             text = buttonText, modifier = Modifier,
@@ -126,12 +136,3 @@ fun CreateTaskButton(
     }
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun TaskEditTextPrev() {
-    val text = remember {
-        mutableStateOf(TextFieldValue(""))
-    }
-    TaskEditText(placeHolder = stringResource(R.string.add_task), state = text)
-}

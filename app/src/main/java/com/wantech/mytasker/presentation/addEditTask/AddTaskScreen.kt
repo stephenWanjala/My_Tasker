@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.wantech.mytasker.R
 import com.wantech.mytasker.presentation.addEditTask.components.AddTaskAppBar
 import com.wantech.mytasker.presentation.addEditTask.components.CategoryChipsSection
@@ -28,22 +27,17 @@ import com.wantech.mytasker.presentation.addEditTask.components.CreateTaskButton
 import com.wantech.mytasker.presentation.addEditTask.components.TaskBody
 import com.wantech.mytasker.presentation.addEditTask.components.TaskTime
 import com.wantech.mytasker.presentation.addEditTask.components.TaskTittle
-import com.wantech.mytasker.util.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddTaskScreen(navController: NavHostController) {
+fun AddTaskScreen(
+    closePage: () -> Unit,
+    onCreateTask: () -> Unit
+) {
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Scaffold(modifier = Modifier.fillMaxSize(),
             topBar = {
-                AddTaskAppBar(closePage = {
-                    navController.navigate(Screen.HomeScreen.route) {
-                        popUpTo(Screen.AddEditScreen.route) {
-                            inclusive = true
-                        }
-                        navController.popBackStack()
-                    }
-                })
+                AddTaskAppBar(closePage = closePage)
             }) {
             val paddingValues = it
             Column(
@@ -70,7 +64,7 @@ fun AddTaskScreen(navController: NavHostController) {
                      */
                 },
                     onclick = {
-
+                        onCreateTask()
                     })
             }
         }

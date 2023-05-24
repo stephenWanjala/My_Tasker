@@ -22,7 +22,7 @@ interface TaskDao {
     @Update
     suspend fun updateTask(task: Task)
 
-    @Query("SELECT * FROM Task WHERE completed=true")
+    @Query("SELECT * FROM Task WHERE completed=1")
     fun getCompletedTasks():Flow<List<Task>>
 
 

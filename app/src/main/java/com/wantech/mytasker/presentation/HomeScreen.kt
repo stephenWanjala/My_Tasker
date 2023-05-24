@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
@@ -23,7 +24,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.wantech.mytasker.R
-import com.wantech.mytasker.domain.model.Task
 import com.wantech.mytasker.presentation.components.GreeterSection
 import com.wantech.mytasker.presentation.components.HomeHeader
 import com.wantech.mytasker.presentation.components.TaskItem
@@ -31,11 +31,15 @@ import com.wantech.mytasker.util.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(
+    navController: NavHostController,
+    taskState: TaskState
+) {
     val lazyListState = rememberLazyListState()
     val showBar = remember {
         derivedStateOf { lazyListState.firstVisibleItemIndex == 0 }
     }
+
 
 
     Scaffold(topBar = {
@@ -64,20 +68,14 @@ fun HomeScreen(navController: NavHostController) {
             state = lazyListState
         ) {
             item {
-                GreeterSection()
+                GreeterSection(tasksAvailable = taskState.tasks.size)
             }
-            items(10) { index ->
+            items(taskState.tasks) { task ->
                 Spacer(modifier = Modifier.height(8.dp))
                 TaskItem(
-                    task = Task(
-                        taskTittle = "Walk around",
-                        taskBody = "Walk around Msu area",
-                        startTime = System.currentTimeMillis() + (1000 * index),
-                        endTime = System.currentTimeMillis() + 200000 + (100 * index),
-                        completed = true
-                    ),
-                    onclickTask = { task ->
-                        navController.navigate(Screen.AddEditScreen.route + "?taskId=${task.taskId}")
+                    task = task,
+                    onclickTask = { clickedTask ->
+                        navController.navigate(Screen.AddEditScreen.route + "?taskId=${clickedTask.taskId}")
                     },
                 )
             }

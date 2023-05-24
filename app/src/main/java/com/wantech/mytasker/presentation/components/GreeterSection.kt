@@ -13,7 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun GreeterSection(modifier: Modifier = Modifier) {
+fun GreeterSection(modifier: Modifier = Modifier, tasksAvailable: Int) {
     Column(
         modifier = modifier.fillMaxWidth().padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -25,7 +25,7 @@ fun GreeterSection(modifier: Modifier = Modifier) {
         )
 
         Text(
-            text = "5 Tasks For Today Sunday",
+            text = "$tasksAvailable Tasks For Today",
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Medium
         )

@@ -30,6 +30,7 @@ import com.wantech.mytasker.presentation.addEditTask.components.TaskTime
 import com.wantech.mytasker.presentation.addEditTask.components.TaskTittle
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZoneOffset
@@ -82,7 +83,10 @@ fun AddTaskScreen(
                 CreateTaskButton(
                     buttonText = stringResource(R.string.create_task),
                     enabled = state.value.createButtonEnabled,
-                    onclick = onCreateTask
+                    onclick = {
+                        taskViewModel.onEvent(TaskUiEvent.SaveTask)
+                        onCreateTask.invoke()
+                    }
                 )
             }
         }
@@ -95,3 +99,5 @@ fun LocalTime.toEpochMillis(): Long =
 
 fun Long.toLocalTime(): LocalTime =
     Instant.ofEpochMilli(this).atZone(ZoneId.systemDefault()).toLocalTime()
+
+

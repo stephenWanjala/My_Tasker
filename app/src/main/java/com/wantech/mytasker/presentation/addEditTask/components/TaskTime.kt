@@ -131,15 +131,12 @@ fun TaskTime(
                 })
                 negativeButton(text = stringResource(R.string.cancel))
             }) {
-            startTime?.let {
-                it.plusMinutes(10L)..LocalTime.MAX
-            }?.let {
+
                 timepicker(
                     title = stringResource(R.string.select_end_time),
                     onTimeChange = onEndTimeChange,
-                    timeRange = it,
+                    timeRange = (startTime ?: LocalTime.now()) ..LocalTime.MAX
                 )
-            }
         }
 
 

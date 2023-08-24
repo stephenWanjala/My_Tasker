@@ -132,13 +132,21 @@ fun TaskTime(
                 negativeButton(text = stringResource(R.string.cancel))
             }) {
 
-                timepicker(
-                    title = stringResource(R.string.select_end_time),
-                    onTimeChange = onEndTimeChange,
-                    timeRange = (startTime ?: LocalTime.now()) ..LocalTime.MAX
-                )
+            timepicker(
+                title = stringResource(R.string.select_end_time),
+                onTimeChange = onEndTimeChange,
+                timeRange = (startTime ?: LocalTime.now())..LocalTime.MAX
+            )
         }
 
 
     }
+}
+
+@Composable
+fun TaskTime(
+    modifier: Modifier = Modifier,
+
+) {
+
 }

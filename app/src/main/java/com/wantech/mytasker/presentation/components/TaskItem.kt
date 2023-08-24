@@ -29,7 +29,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wantech.mytasker.domain.model.Task
-import com.wantech.mytasker.util.toDate
+import com.wantech.mytasker.presentation.addEditTask.stringToLocalTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,8 +52,10 @@ fun TaskItem(modifier: Modifier = Modifier, task: Task, onclickTask: (Task) -> U
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        val date2 =task.startTime.stringToLocalTime(DateTimeFormatter.ISO_LOCAL_TIME)
+        date2.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
         Text(
-            text = task.startTime.toDate(),
+            text = date2.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)),
             fontWeight = FontWeight.Bold
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -82,8 +87,13 @@ fun TaskItem(modifier: Modifier = Modifier, task: Task, onclickTask: (Task) -> U
                             style = MaterialTheme.typography.titleMedium
                         )
                         Text(text = task.taskBody)
+                        val x=DateTimeFormatter.ISO_LOCAL_TIME
+                        val date =task.startTime.stringToLocalTime(x)
+                        val date2 =task.startTime.stringToLocalTime(x)
+                        val startTime =date.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+                        val endTime =date2.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
                         Text(
-                            text = "${task.startTime.toDate("hh:mm")} - ${task.endTime.toDate("hh:mm")}",
+                            text = "$startTime - $endTime",
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -102,8 +112,10 @@ fun TaskItem(modifier: Modifier = Modifier, task: Task, onclickTask: (Task) -> U
 @Composable
 fun TaskItemPreview() {
     TaskItem(task = Task(
-        taskTittle = "Walk around", taskBody = "Walk around Msu area",
-        startTime = System.currentTimeMillis(), endTime = System.currentTimeMillis() + 200000
+        taskTittle = "Walk around",
+        taskBody = "Walk around Msu area",
+        startTime = LocalTime.now().toString(),
+        endTime = (LocalTime.now().plusMinutes(20)).toString()
     ), onclickTask = {})
 }
 

@@ -30,10 +30,10 @@ import com.wantech.mytasker.presentation.addEditTask.components.TaskTime
 import com.wantech.mytasker.presentation.addEditTask.components.TaskTittle
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,18 +62,18 @@ fun AddTaskScreen(
                     })
                 CategoryChipsSection()
                 TaskTime(
-                    startTime = state.value.startTime?.toLocalTime(),
-                    endTime = state.value.endTime?.toLocalTime(),
+                    startTime = state.value.startTime?.stringToLocalTime(),
+                    endTime = state.value.endTime?.stringToLocalTime(),
                     onStartTimeChange = { startTime ->
                         taskViewModel.onEvent(
                             TaskUiEvent.SelectStartTime(
-                                value = startTime.toEpochMillis()
+                                value = startTime
                             )
                         )
 
                     },
                     onEndTimeChange = { endTime ->
-                        taskViewModel.onEvent(TaskUiEvent.SelectEndTime(value = endTime.toEpochMillis()))
+                        taskViewModel.onEvent(TaskUiEvent.SelectEndTime(value = endTime))
                     }
                 )
                 TaskBody(body = state.value.taskBody,
@@ -101,3 +101,4 @@ fun Long.toLocalTime(): LocalTime =
     Instant.ofEpochMilli(this).atZone(ZoneId.systemDefault()).toLocalTime()
 
 
+fun String.stringToLocalTime(formatter:DateTimeFormatter=DateTimeFormatter.ISO_LOCAL_TIME):LocalTime = (LocalTime.parse(this,formatter))

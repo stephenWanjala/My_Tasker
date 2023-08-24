@@ -40,7 +40,7 @@ class TaskViewModel @Inject constructor(
             }
 
             is TaskUiEvent.EnterTittle -> {
-                _state.update { it.copy(tittle = event.value) }
+                _state.update { it.copy(tittle = event.value.toString()) }
                 enableCreateTaskButton()
             }
 
@@ -49,12 +49,12 @@ class TaskViewModel @Inject constructor(
             }
 
             is TaskUiEvent.SelectStartTime -> {
-                _state.update { it.copy(startTime = event.value) }
+                _state.update { it.copy(startTime = event.value.toString()) }
                 enableCreateTaskButton()
             }
 
             is TaskUiEvent.SelectEndTime -> {
-                _state.update { it.copy(endTime = event.value) }
+                _state.update { it.copy(endTime = event.value.toString()) }
                 enableCreateTaskButton()
             }
 

@@ -14,7 +14,7 @@ Built using Jetpack libraries, including Jetpack Compose for the user interface,
 
 `Notification for Upcoming Tasks`: The application sends notifications for tasks that are nearing their end time but have not yet been marked as complete. This feature helps prevent important tasks from being overlooked.
 
-`Upcoming Features (ToDos)`
+## Upcoming Features (ToDos)
 The following features are in the pipeline and will be implemented soon:
 
 `Task Deletion Confirmation`: Implement a confirmation dialog when deleting a task to prevent accidental deletions.
